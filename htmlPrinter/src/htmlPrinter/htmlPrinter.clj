@@ -3,6 +3,7 @@
 (import java.io.StringReader)
 (import java.io.FileInputStream)
 (import javax.print.PrintServiceLookup)
+(import javax.print.attribute.standard.PrinterResolution)
 (import javax.print.attribute.HashPrintRequestAttributeSet)
 (import javax.print.attribute.HashPrintServiceAttributeSet)
 (import javax.print.attribute.standard.MediaSizeName)
@@ -35,9 +36,9 @@
 (defn show-text-pane [textPane]
   (def temp-frame (new JFrame))
   ;(. textPane setWidth 130)
-  (. textPane setSize 130 130)
+  ;(. textPane setSize 130 130)
   ;(. temp-frame setHeight 130)
-  (. temp-frame setSize 130 130)
+  (. temp-frame setSize (. textPane getWidth) (. textPane getHeight))
   (. temp-frame add textPane)
   (. temp-frame setVisible true)
   )
@@ -45,6 +46,8 @@
 ;print from html string
 (defn print-html-by-print-service [printer-service html-url show-print-dialog? print-attributes interactive?]
     (let [textPane (new JEditorPane my-html-url)]
+        (. textPane setSize 2480 1610)
+        (show-text-pane textPane)
         (. textPane print
             (new MessageFormat "") 
             (new MessageFormat "") 
@@ -82,10 +85,11 @@
                              interactive?)
 )
 ;see http://www.cs.mun.ca/java-api-1.5/guide/jps/spec/attributes.fm5.html for more attributes
-(defn get-print-request-attributes [page-size]
+(defn get-print-request-attributes [page-size x-feed feed]
   (let [attributes (new HashPrintRequestAttributeSet)]
-    (if (= page-size MediaSizeName/INVOICE) (. attributes add (. MediaSizeName INVOICE))
-           (. attributes add (. MediaSizeName INVOICE)))
+    (if (= page-size MediaSizeName/INVOICE) (. attributes add (. MediaSizeName MediaSizeName/ISO_A4))
+           (. attributes add (. MediaSizeName MediaSizeName/ISO_A4)))
+    (. attributes add (new PrinterResolution x-feed feed PrinterResolution/DPCM)) 
     attributes
  ))
  
@@ -94,11 +98,11 @@
     nitro-printer-name 
     my-html-url 
     false 
-    (get-print-request-attributes MediaSizeName/ISO_A4)
+    (get-print-request-attributes MediaSizeName/ISO_A4 120 100)
     false)
 ;print to the default local printer
 (print-html-by-default-printer 
     my-html-url 
     false 
-    (get-print-request-attributes MediaSizeName/ISO_A4)
+    (get-print-request-attributes MediaSizeName/ISO_A4 100 100)
     false)
