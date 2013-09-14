@@ -1,13 +1,13 @@
 # htmlPrinter
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library designed to print kids/parent stickers for kids church
 
 ## Usage
 
-FIXME
+Not used yet :)
 
 ## License
 
-Copyright Â© 2013 FIXME
+Copyright pdcoxhead © 2013 FIXME
 
 Distributed under the Eclipse Public License, the same as Clojure.
